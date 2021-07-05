@@ -1,43 +1,19 @@
 <?php
 session_start();
-error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['login'])==0)
-    {   
-header('location:index.php');
-}
-else{
-	if(isset($_POST['update']))
-	{
-		$nombre=$_POST['nombre'];
-		$telefono_celular=$_POST['telefono_celular'];
-		$query=mysqli_query($con,"update usuarios set nombre='$nombre',telefono_celular='$telefono_celular' where id='".$_SESSION['id']."'");
-		if($query)
-		{
-echo "<script>alert('Your info has been updated');</script>";
-		}
-	}
-
-
-date_default_timezone_set('America/Lima');// change according timezone
-$currentTime = date( 'd-m-Y h:i:s A', time () );
-
-
-if(isset($_POST['submit']))
-{
-$sql=mysqli_query($con,"SELECT contraseña FROM  usuarios where contraseña='".md5($_POST['cpass'])."' && id='".$_SESSION['id']."'");
-$num=mysqli_fetch_array($sql);
-if($num>0)
-{
- $con=mysqli_query($con,"update students set password='".md5($_POST['newpass'])."', updationDate='$currentTime' where id='".$_SESSION['id']."'");
-echo "<script>alert('Password Changed Successfully !!');</script>";
-}
-else
-{
-	echo "<script>alert('Contraseña actual no coincide !!');</script>";
-}
+include "conexion.php";
+$varsesion = $_SESSION['correo'];
+if ($varsesion) {
+} elseif ($varsesion == null || $varsesion = '') {
+    echo '<script>
+    alert("Inicia sesión para acceder a la plataforma.");
+    window.location = "login.php";
+    </script>';
+    die();
 }
 
+$consulta  = "SELECT * FROM usuarios WHERE correo='$varsesion'";
+$resultado = mysqli_query($conexion, $consulta);
+$filas     = mysqli_fetch_array($resultado);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -158,34 +134,35 @@ return true;
 		<!-- panel-body  -->
 	    <div class="panel-body">
 			<div class="row">		
-<h4>Información personal</h4>
-				<div class="col-md-12 col-sm-12 already-registered-login">
+			<h4>Información personal</h4>
+			
+		<div class="col-md-12 col-sm-12 already-registered-login">
 
-<?php
-$query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
-while($row=mysqli_fetch_array($query))
-{
-?>
+
 
 					<form class="register-form" role="form" method="post">
+						<?php
+ 						  $varsesion = $_SESSION['correo'];
+ 	 						 if ($varsesion) {
+   						/*  echo $filas['id'], " ", $filas['correo']; */
+								?>
 <div class="form-group">
 					    <label class="info-title" for="name">Nombres completos<span>*</span></label>
-					    <input type="text" class="form-control unicase-form-control text-input" value="<?php echo $row['name'];?>" id="name" name="name" required="required">
+					    <input type="text" class="form-control unicase-form-control text-input" id="nombre" name="nombre" value="<?php echo $filas['nombre'], " ", $filas['apellido'];?>" required="required">
 					  </div>
-
-
 
 						<div class="form-group">
 					    <label class="info-title" for="exampleInputEmail1">Correo electrónico <span>*</span></label>
-			 <input type="email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" value="<?php echo $row['email'];?>" readonly>
+			 <input type="email" class="form-control unicase-form-control text-input" id="exampleInputEmail1" value="<?php echo $filas['correo'];?>" readonly>
 					  </div>
 					  <div class="form-group">
-					    <label class="info-title" for="Contact No.">Teléfono/Celular. <span>*</span></label>
-					    <input type="text" class="form-control unicase-form-control text-input" id="contactno" name="contactno" required="required" value="<?php echo $row['contactno'];?>"  maxlength="10">
+					    <label class="info-title" for="Contact No." >Teléfono/Celular. <span>*</span></label>
+					    <input type="text" class="form-control unicase-form-control text-input" id="telefono_celular" name="telefono_celular" value="<?php echo $filas['telefono_celular'];?>" required="required" maxlength="10">
 					  </div>
 					  <button type="submit" name="update" class="btn-upper btn btn-primary checkout-page-button">Actualizar</button>
+					<?php }?>
 					</form>
-					<?php } ?>
+					
 				</div>	
 				<!-- already-registered-login -->		
 
@@ -280,4 +257,3 @@ while($row=mysqli_fetch_array($query))
 	</script>
 </body>
 </html>
-<?php } ?>

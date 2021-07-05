@@ -279,4 +279,4 @@ while($row=mysqli_fetch_array($query))
 	</script>
 </body>
 </html>
-<?php } ?>
+<?php ?>

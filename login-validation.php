@@ -31,7 +31,7 @@ $_SESSION['correo'] = $correo;
 $varsesion = $_SESSION['correo'];
 
 //SE INICIA LA CONEXIÓN//
-$conexion = mysqli_connect("localhost", "root", "12345678", "modelado_bsd");
+$conexion = mysqli_connect("localhost", "root", "", "modelado_bsd");
 
 //CONSULTA PARA INSERTAR//
 $consulta = "SELECT * FROM usuarios WHERE correo = '$correo' AND contraseña = '$contraseña'";
