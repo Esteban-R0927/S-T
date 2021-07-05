@@ -1,0 +1,47 @@
+.container {
+
+    /*margin-top: 10%;*/
+
+}
+.card {
+    position: relative;
+    overflow: hidden;
+}
+.card:before {
+    position: absolute;
+    content: '';
+    width: 80%;
+    height: 220%;
+    background: rgba(78, 115, 223,0.7);
+    top: -50%;
+    left: -100%;
+    z-index: 1;
+    transform: rotate(25deg);
+    transform-origin: center top 0;
+    transition: .5s;
+}
+.card:hover:before {
+    left: 10%;
+}
+.card img {
+    width: 100%;
+    height: auto;
+}
+.card-text {
+    width: 100%;
+    padding: 0 20px;
+    position: absolute;
+    top: -100%;
+    color: #FFF;
+    left: 0;
+    z-index: 2;
+    transition: 1.1s;
+}
+.card-text h4 {
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.card:hover .card-text {
+    top: 80px;
+}
